@@ -1,4 +1,5 @@
 from telebot import types
+import os
 from handlers.main_menu import get_main_menu
 
 passages = {
@@ -24,6 +25,17 @@ def register_reading_handlers(bot):
             types.KeyboardButton("🔙 Back")
         )
         bot.send_message(message.chat.id, "Select a passage or full reading test:", reply_markup=markup)
+
+    @bot.message_handler(func=lambda message: message.text.startswith("Test"))
+    def send_test_file(message):
+        test_name = message.text.lower().replace(" ", "")
+        file_path = os.path.join("tests", f"{test_name}.html")
+
+        if os.path.exists(file_path):
+            with open(file_path, "rb") as f:
+                bot.send_document(message.chat.id, f) 
+        else:
+            bot.send_message(message.chat.id, "Sorry, this test file is not available yet.")
 
     @bot.message_handler(func=lambda message: message.text in list(passages.keys()) + ["Full Reading Test", "🔙 Back"])
     def reading_selection(message):
