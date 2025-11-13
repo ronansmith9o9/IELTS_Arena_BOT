@@ -4,6 +4,7 @@ from handlers.main_menu import get_main_menu
 from handlers.reading import register_reading_handlers
 from handlers.listening import register_listening_handlers
 from handlers.writing import register_writing_handlers
+from handlers.speaking import register_speaking_handler  # <-- speaking.py dan
 
 TOKEN = "8276217068:AAESR-xxhwcFaMf6zXIwQynlm3CN7LNiAFI"
 CHANNEL = "@American_Life018"  # Kanal username
@@ -54,6 +55,13 @@ def confirm_subscription(call):
     user_id = call.from_user.id
     if is_subscribed(user_id):
         bot.answer_callback_query(call.id, "Obuna tasdiqlandi ✅")
+
+        # Callback xabarni o‘chirish
+        try:
+            bot.delete_message(call.message.chat.id, call.message.message_id)
+        except:
+            pass
+
         if user_id not in user_data:
             bot.send_message(call.message.chat.id, "Iltimos, ismingizni kiriting:")
             user_state[user_id] = 'waiting_name'
@@ -128,6 +136,7 @@ def handle_links(message):
 register_reading_handlers(bot)
 register_listening_handlers(bot)
 register_writing_handlers(bot)
+register_speaking_handler(bot)  # speaking tugmasini qo'shish
 
 print("Bot ishga tushdi... ✅")
 bot.polling()
