@@ -1,4 +1,6 @@
 import telebot
+from dotenv import load_dotenv
+import os
 from handlers.main_menu import register_handlers
 from handlers.reading import register_reading_handlers
 from handlers.listening import register_listening_handlers
@@ -6,9 +8,13 @@ from handlers.listening import register_listening_handlers
 TOKEN = "8276217068:AAESR-xxhwcFaMf6zXIwQynlm3CN7LNiAFI"
 bot = telebot.TeleBot("8276217068:AAESR-xxhwcFaMf6zXIwQynlm3CN7LNiAFI")
 
+load_dotenv()
+TOKEN = os.getenv("BOT_TOKEN")
+CHANNEL_ID = os.getenv("CHANNEL")
+
 bot = telebot.TeleBot(TOKEN, parse_mode=None, threaded=True, num_threads=4, skip_pending=True)
-telebot.apihelper.CONNECT_TIMEOUT = 60
-telebot.apihelper.READ_TIMEOUT = 60
+telebot.apihelper.CONNECT_TIMEOUT = 15
+telebot.apihelper.READ_TIMEOUT = 15
 
 
 register_handlers(bot)
